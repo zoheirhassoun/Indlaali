@@ -59,18 +59,17 @@
         <a href="index.html" class="logo d-flex align-items-center me-auto">
           <!-- Uncomment the line below if you also wish to use an image logo -->
           <!-- <img src="assets/img/logo.png" alt=""> -->
-          <img src="Haya logo.png" alt="إندلالي Logo" class="sitename">
+          <img src="assets/img/شعار وزارة التعليم الجديد بدقة عالية  SVG – PNG.svg" alt="شعار وزارة التعليم" style="width: 60px; height: 60px; margin-left: 15px;">
+          <img src="indlali logo.png" alt="إندلالي Logo" class="sitename">
         </a>
 
         <nav id="navmenu" class="navmenu">
           <ul>
             <li><a href="#hero" class="active">الرئيسية<br></a></li>
             <li><a href="#about">من نحن</a></li>
-            <li><a href="#services">الخدمات التعليمية</a></li>
-
             <li><a href="#doctors">فريق العمل</a></li>
-
-            <li><a href="#contact">تواصل معنا</a></li>
+            <li><a href="#ai-consultation">المحادثة مع المعلمة الذكية</a></li>
+            <li><a href="#interactive-map">الخريطة التفاعلية</a></li>
           </ul>
           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
@@ -196,7 +195,297 @@
 
     </section><!-- /About Section -->
 
-    <!-- Stats Section -->
+    <!-- AI Chat Section - المحادثة مع المعلمة الذكية -->
+    <section id="ai-consultation" class="consultation section light-background">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>المحادثة مع المعلمة الذكية</h2>
+                <p>اطرح استفسارك التعليمي واحصل على إجابة ذكية من المعلمة ريم مشاري</p>
+            </div>
+            <div class="consultation-container" data-aos="fade-up" data-aos-delay="100">
+                <div class="consultation-form">
+                    <div class="form-group">
+                        <label for="educational-query">اكتب استفسارك التعليمي:</label>
+                        <textarea id="educational-query" placeholder="مثال: ما هي أفضل طرق التعلم الفعال؟ أو كيف يمكنني تطوير مهاراتي الأكاديمية؟" rows="6"></textarea>
+                    </div>
+                    <button id="submit-educational-query" class="submit-btn">
+                        <i class="fas fa-brain"></i>
+                        أرسل سؤالك للمعلمة الذكية
+                    </button>
+                </div>
+                <div class="consultation-result" id="educational-consultation-result">
+                    <div class="result-header">
+                        <h3>إجابة المعلمة الذكية</h3>
+                        <div class="result-meta">
+                            <span class="time">الوقت: -- ثانية</span>
+                        </div>
+                    </div>
+                    <div class="result-content" id="educational-result-content">
+                        <div class="loading-state" id="educational-initial-loading">
+                            <i class="fas fa-cog fa-spin"></i>
+                            <p>جاري تحميل النظام...</p>
+                        </div>
+                        <p class="placeholder" id="educational-placeholder-text" style="display: none;">ستظهر إجابة المعلمة الذكية هنا بعد إرسال استفسارك</p>
+                    </div>
+                    <div class="result-actions" id="educational-result-actions" style="display: none;">
+                        <button class="action-btn copy-btn" id="educational-copy-btn" title="نسخ الإجابة">
+                            <i class="fas fa-copy"></i>
+                            نسخ الإجابة
+                        </button>
+                        <button class="action-btn print-btn" id="educational-print-btn" title="طباعة الإجابة">
+                            <i class="fas fa-print"></i>
+                            طباعة الإجابة
+                        </button>
+                    </div>
+                    <div class="rating-section" id="educational-rating-section" style="display: none;">
+                        <h4>هل كانت الإجابة مفيدة؟</h4>
+                        <div class="rating-buttons">
+                            <button class="rating-btn positive" id="educational-positive-rating">
+                                <i class="fas fa-thumbs-up"></i>
+                                مفيدة
+                            </button>
+                            <button class="rating-btn negative" id="educational-negative-rating">
+                                <i class="fas fa-thumbs-down"></i>
+                                غير مفيدة
+                            </button>
+                        </div>
+                        <div class="comment-section" id="educational-comment-section" style="display: none;">
+                            <textarea id="educational-user-comment" placeholder="أضف تعليقك (اختياري)..." rows="3"></textarea>
+                            <button id="educational-submit-rating" class="submit-rating-btn">إرسال التقييم</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                      </section><!-- /AI Chat Section -->
+            
+                  <!-- Interactive Map Section - قسم الخريطة التفاعلية -->
+                  <section id="interactive-map" class="interactive-map-section">
+                      <div class="container">
+                          <div class="section-title" data-aos="fade-up">
+                              <h2>الخريطة التفاعلية</h2>
+                              <p>اكتشف مناطق المملكة العربية السعودية وتفاعل مع الخريطة</p>
+                              <div class="map-stats">
+                                  <div class="stat-item">
+                                      <span class="stat-number">32</span>
+                                      <span class="stat-label">مدينة رئيسية</span>
+                                  </div>
+                                  <div class="stat-item">
+                                      <span class="stat-number">13</span>
+                                      <span class="stat-label">منطقة إدارية</span>
+                                  </div>
+                                  <div class="stat-item">
+                                      <span class="stat-number">5</span>
+                                      <span class="stat-label">مناطق اقتصادية</span>
+                                  </div>
+                                  <div class="stat-item">
+                                      <span class="stat-number">8</span>
+                                      <span class="stat-label">مدن صناعية</span>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="interactive-map" data-aos="fade-up" data-aos-delay="100">
+                              <div class="map-container">
+                                  <img src="assets/img/saudi-map.png" alt="خريطة المملكة العربية السعودية" class="map-image"/>
+                                  
+                                  <!-- Map Legend -->
+                                  <div class="map-legend">
+                                      <div class="legend-title">دليل المناطق</div>
+                                      <div class="legend-item">
+                                          <div class="legend-color legend-capital"></div>
+                                          <span>العاصمة</span>
+                                      </div>
+                                      <div class="legend-item">
+                                          <div class="legend-color legend-holy"></div>
+                                          <span>المقدسة</span>
+                                      </div>
+                                      <div class="legend-item">
+                                          <div class="legend-color legend-eastern"></div>
+                                          <span>الشرقية</span>
+                                      </div>
+                                      <div class="legend-item">
+                                          <div class="legend-color legend-western"></div>
+                                          <span>الغربية</span>
+                                      </div>
+                                      <div class="legend-item">
+                                          <div class="legend-color legend-northern"></div>
+                                          <span>الشمالية</span>
+                                      </div>
+                                      <div class="legend-item">
+                                          <div class="legend-color legend-southern"></div>
+                                          <span>الجنوبية</span>
+                                      </div>
+                                      <div class="legend-item">
+                                          <div class="legend-color legend-central"></div>
+                                          <span>الوسطى</span>
+                                      </div>
+                                      <div class="legend-item">
+                                          <div class="legend-color legend-special"></div>
+                                          <span>المناطق الاقتصادية</span>
+                                      </div>
+                                      <div class="legend-item">
+                                          <div class="legend-color legend-industrial"></div>
+                                          <span>المدن الصناعية</span>
+                                      </div>
+                                      <div class="legend-item">
+                                          <div class="legend-color legend-tourism"></div>
+                                          <span>الوجهات السياحية</span>
+                                      </div>
+                                      <div class="legend-item">
+                                          <div class="legend-color legend-education"></div>
+                                          <span>المراكز التعليمية</span>
+                                      </div>
+                                  </div>
+                                  
+                                  <!-- City markers with percentages and different colors -->
+                                  <div class="city-marker marker-capital" style="top: 60%; left: 47%;" data-tooltip="العاصمة - الرياض">
+                                      <div class="percentage">78%</div>
+                                      <div class="city-name">الرياض</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  <div class="city-marker marker-eastern" style="top: 50%; left: 55%;">
+                                      <div class="percentage">65%</div>
+                                      <div class="city-name">الدمام</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  <div class="city-marker marker-western" style="top: 70%; left: 40%;">
+                                      <div class="percentage">82%</div>
+                                      <div class="city-name">جدة</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  <div class="city-marker marker-holy" style="top: 60%; left: 35%;">
+                                      <div class="percentage">71%</div>
+                                      <div class="city-name">مكة المكرمة</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  <div class="city-marker marker-northern" style="top: 40%; left: 40%;">
+                                      <div class="percentage">59%</div>
+                                      <div class="city-name">الجوف</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  <div class="city-marker marker-holy" style="top: 48%; left: 35%;">
+                                      <div class="percentage">67%</div>
+                                      <div class="city-name">المدينة المنورة</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  
+                                  <!-- Additional regional markers -->
+                                  <div class="city-marker marker-southern" style="top: 80%; left: 45%;">
+                                      <div class="percentage">74%</div>
+                                      <div class="city-name">أبها</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  <div class="city-marker marker-central" style="top: 55%; left: 43%;">
+                                      <div class="percentage">68%</div>
+                                      <div class="city-name">القصيم</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  <div class="city-marker marker-western" style="top: 45%; left: 37%;">
+                                      <div class="percentage">72%</div>
+                                      <div class="city-name">تبوك</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  
+                                  <!-- New Professional Markers -->
+                                  <div class="city-marker marker-eastern" style="top: 65%; left: 58%;">
+                                      <div class="percentage">81%</div>
+                                      <div class="city-name">الخبر</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  <div class="city-marker marker-eastern" style="top: 58%; left: 62%;">
+                                      <div class="percentage">76%</div>
+                                      <div class="city-name">الظهران</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  <div class="city-marker marker-western" style="top: 75%; left: 35%;">
+                                      <div class="percentage">69%</div>
+                                      <div class="city-name">رابغ</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  <div class="city-marker marker-holy" style="top: 52%; left: 32%;">
+                                      <div class="percentage">73%</div>
+                                      <div class="city-name">الطائف</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  <div class="city-marker marker-northern" style="top: 35%; left: 45%;">
+                                      <div class="percentage">64%</div>
+                                      <div class="city-name">حائل</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  <div class="city-marker marker-southern" style="top: 85%; left: 50%;">
+                                      <div class="percentage">71%</div>
+                                      <div class="city-name">جازان</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  <div class="city-marker marker-central" style="top: 62%; left: 48%;">
+                                      <div class="percentage">66%</div>
+                                      <div class="city-name">بريدة</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  <div class="city-marker marker-western" style="top: 50%; left: 42%;">
+                                      <div class="percentage">75%</div>
+                                      <div class="city-name">ينبع</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  
+                                  <!-- Special Economic Zones -->
+                                  <div class="city-marker marker-special" style="top: 55%; left: 52%;">
+                                      <div class="percentage">95%</div>
+                                      <div class="city-name">مدينة الملك عبدالله الاقتصادية</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  <div class="city-marker marker-special" style="top: 68%; left: 38%;">
+                                      <div class="percentage">88%</div>
+                                      <div class="city-name">نيوم</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  <div class="city-marker marker-special" style="top: 42%; left: 50%;">
+                                      <div class="percentage">92%</div>
+                                      <div class="city-name">القدية</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  
+                                  <!-- Industrial Cities -->
+                                  <div class="city-marker marker-industrial" style="top: 70%; left: 53%;">
+                                      <div class="percentage">89%</div>
+                                      <div class="city-name">مدينة الجبيل الصناعية</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  <div class="city-marker marker-industrial" style="top: 72%; left: 36%;">
+                                      <div class="percentage">83%</div>
+                                      <div class="city-name">مدينة ينبع الصناعية</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  
+                                  <!-- Tourism Destinations -->
+                                  <div class="city-marker marker-tourism" style="top: 78%; left: 42%;">
+                                      <div class="percentage">77%</div>
+                                      <div class="city-name">أبها السياحية</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  <div class="city-marker marker-tourism" style="top: 30%; left: 38%;">
+                                      <div class="percentage">68%</div>
+                                      <div class="city-name">ألجوف السياحية</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  
+                                  <!-- Educational Centers -->
+                                  <div class="city-marker marker-education" style="top: 58%; left: 46%;">
+                                      <div class="percentage">91%</div>
+                                      <div class="city-name">جامعة الملك سعود</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                                  <div class="city-marker marker-education" style="top: 67%; left: 39%;">
+                                      <div class="percentage">87%</div>
+                                      <div class="city-name">جامعة الملك عبدالعزيز</div>
+                                      <div class="marker-glow"></div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </section><!-- /Interactive Map Section -->
+            
+                  <!-- Stats Section -->
     <section id="stats" class="stats section light-background">
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -242,7 +531,7 @@
     </section><!-- /Stats Section -->
 
     <!-- Services Section -->
-    <section id="services" class="services section">
+    <section id="services" class="services section" style="display: none;">
 
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
@@ -389,39 +678,7 @@
             </div>
           </div><!-- End Team Member -->
 
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
-            <div class="team-member d-flex align-items-start">
-              <div class="pic"><img src="assets/img/doctors/doctors-3.jpg" class="img-fluid" alt=""></div>
-              <div class="member-info">
-                <h4>أحمد محمد</h4>
-                <span>أخصائي مختبرات</span>
-                <!-- <p>Quisquam facilis cum velit laborum corrupti fuga rerum quia</p> -->
-                <div class="social">
-                  <a href=""><i class="bi bi-twitter-x"></i></a>
-                  <a href=""><i class="bi bi-facebook"></i></a>
-                  <a href=""><i class="bi bi-instagram"></i></a>
-                  <a href=""> <i class="bi bi-linkedin"></i> </a>
-                </div>
-              </div>
-            </div>
-          </div><!-- End Team Member -->
 
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
-            <div class="team-member d-flex align-items-start">
-              <div class="pic"><img src="assets/img/doctors/doctors-4.jpg" class="img-fluid" alt=""></div>
-              <div class="member-info">
-                <h4>ريم حسن</h4>
-                <span>فنية مختبر</span>
-                <!-- <p>Dolorum tempora officiis odit laborum officiis et et accusamus</p> -->
-                <div class="social">
-                  <a href=""><i class="bi bi-twitter-x"></i></a>
-                  <a href=""><i class="bi bi-facebook"></i></a>
-                  <a href=""><i class="bi bi-instagram"></i></a>
-                  <a href=""> <i class="bi bi-linkedin"></i> </a>
-                </div>
-              </div>
-            </div>
-          </div><!-- End Team Member -->
 
         </div>
 
@@ -485,7 +742,7 @@
           <div class="col-lg-5 info" data-aos="fade-up" data-aos-delay="100">
             <h3>آراء الطلاب</h3>
             <p>
-              تعرف على آراء الطلاب الذين استفادوا من الخدمات التعليمية المختلفة
+              تعرف على آراء الطلاب الذين استفادوا من خدماتنا التعليمية الإلكترونية
             </p>
           </div>
 
@@ -515,7 +772,7 @@
                       <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img flex-shrink-0" alt="">
                       <div>
                         <h3>محمد عبد الله</h3>
-                        <h4>طالب</h4>
+                        <h4>طالب جامعي</h4>
                         <div class="stars">
                           <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
                         </div>
@@ -523,7 +780,7 @@
                     </div>
                     <p>
                       <i class="bi bi-quote quote-icon-left"></i>
-                      <span>خدمة التعليم عالية الجودة</span>
+                      <span>المعلمة الذكية ساعدتني في مشروع التخرج بشكل رائع، الإجابات دقيقة ومفصلة</span>
                       <i class="bi bi-quote quote-icon-right"></i>
                     </p>
                   </div>
@@ -535,7 +792,7 @@
                       <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img flex-shrink-0" alt="">
                       <div>
                         <h3>هدى</h3>
-                        <h4>طالبة</h4>
+                        <h4>طالبة ماجستير</h4>
                         <div class="stars">
                           <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
                         </div>
@@ -543,7 +800,7 @@
                     </div>
                     <p>
                       <i class="bi bi-quote quote-icon-left"></i>
-                      <span>مركز تعليمي نظيف وخدمات جيدة</span>
+                      <span>المنصة سهلة الاستخدام والاستشارات التعليمية ساعدتني في فهم المناهج المعقدة</span>
                       <i class="bi bi-quote quote-icon-right"></i>
                     </p>
                   </div>
@@ -555,7 +812,7 @@
                       <img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img flex-shrink-0" alt="">
                       <div>
                         <h3>آمنة</h3>
-                        <h4>طالبة</h4>
+                        <h4>باحثة</h4>
                         <div class="stars">
                           <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
                         </div>
@@ -563,7 +820,7 @@
                     </div>
                     <p>
                       <i class="bi bi-quote quote-icon-left"></i>
-                      <span>أفضل مركز تعليمي في الرياض</span>
+                      <span>أفضل منصة تعليمية إلكترونية، المعلمة الذكية تفهم احتياجاتي البحثية بدقة</span>
                       <i class="bi bi-quote quote-icon-right"></i>
                     </p>
                   </div>
@@ -575,7 +832,7 @@
                       <img src="assets/img/testimonials/testimonials-4.jpg" class="testimonial-img flex-shrink-0" alt="">
                       <div>
                         <h3>زهير حسون</h3>
-                        <h4>طالب</h4>
+                        <h4>مطور ويب</h4>
                         <div class="stars">
                           <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
                         </div>
@@ -583,7 +840,7 @@
                     </div>
                     <p>
                       <i class="bi bi-quote quote-icon-left"></i>
-                      <span>من أجمل المراكز التعليمية من ناحية الخدمة والمكان، شكرا لكم</span>
+                      <span>منصة رائعة وسهلة الاستخدام، المعلمة الذكية ساعدتني في تطوير مشاريعي التقنية</span>
                       <i class="bi bi-quote quote-icon-right"></i>
                     </p>
                   </div>
@@ -595,7 +852,7 @@
                       <img src="assets/img/testimonials/testimonials-5.jpg" class="testimonial-img flex-shrink-0" alt="">
                       <div>
                         <h3>أبرار الخليفة</h3>
-                        <h4>طالبة</h4>
+                        <h4>أخصائية تسويق</h4>
                         <div class="stars">
                           <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
                         </div>
@@ -603,7 +860,7 @@
                     </div>
                     <p>
                       <i class="bi bi-quote quote-icon-left"></i>
-                      <span>خدمة التعليم عالية الجودة</span>
+                      <span>الخدمة الإلكترونية ممتازة، الإجابات سريعة ودقيقة، أنصح بها لكل طالب وباحث</span>
                       <i class="bi bi-quote quote-icon-right"></i>
                     </p>
                   </div>
@@ -629,7 +886,7 @@
     </section><!-- /Gallery Section -->
 
     <!-- Contact Section -->
-    <section id="contact" class="contact section">
+    <section id="contact" class="contact section" style="display: none;">
 
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
@@ -637,9 +894,7 @@
         <!-- <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p> -->
       </div><!-- End Section Title -->
 
-      <div class="mb-5" data-aos="fade-up" data-aos-delay="200">
-        <iframe style="border:0; width: 100%; height: 270px;" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d48389.78314118045!2d-74.006138!3d40.710059!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a22a3bda30d%3A0xb89d1fe6bc499443!2sDowntown%20Conference%20Center!5e0!3m2!1sen!2sus!4v1676961268712!5m2!1sen!2sus" frameborder="0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      </div><!-- End Google Maps -->
+
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
 
@@ -721,8 +976,8 @@
             <span class="sitename">إندلالي - المعلمة الذكية</span>
           </a>
           <div class="footer-contact pt-3">
-            <p>طريق خالد بن الوليد</p>
-            <p>حي الروضة، الرياض</p>
+            <!-- <p>طريق خالد بن الوليد</p> -->
+            <!-- <p>حي الروضة، الرياض</p> -->
             <p class="mt-3"><strong>الهاتف:</strong> <span>+966512345678</span></p>
             <p><strong>البريد الإلكتروني:</strong> <span>info@indlaali.com</span></p>
           </div>
@@ -773,6 +1028,14 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+  
+  <!-- AI Chat Scripts -->
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api-service.js"></script>
+  <script src="assets/js/ai-chat.js"></script>
+  
+  <!-- Interactive Map Scripts -->
+  <script src="assets/js/map-interactions.js"></script>
 
 </body>
 
