@@ -111,24 +111,25 @@ document.addEventListener('DOMContentLoaded', function() {
                         return;
                     }
                     
-                    // Use API service to send educational query
                     const result = await apiService.sendEducationalQuery(query);
+                    const answerText = (result.data && result.data.answer && String(result.data.answer).trim()) || '';
+                    const recommendations = (result.data && result.data.recommendations && Array.isArray(result.data.recommendations)) ? result.data.recommendations : [];
+                    const displayAnswer = answerText || 'عذراً، لم نتمكن من إعداد إجابة لهذا السؤال حالياً. يرجى إعادة صياغة سؤالك أو المحاولة لاحقاً.';
                     
-                    // Update result content
                     educationalResultContent.innerHTML = `
                         <div class="educational-response">
                             <h4>إجابة المعلمة الذكية:</h4>
-                            <p>${result.data.answer}</p>
-                            ${result.data.recommendations && result.data.recommendations.length > 0 ? `
+                            <p>${displayAnswer.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>
+                            ${recommendations.length > 0 ? `
                                 <h4>التوصيات:</h4>
                                 <ul>
-                                    ${result.data.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                                    ${recommendations.map(rec => `<li>${String(rec).replace(/</g, '&lt;').replace(/>/g, '&gt;')}</li>`).join('')}
                                 </ul>
                             ` : ''}
                             ${result.source === 'fallback' ? `
                                 <div class="fallback-notice">
                                     <i class="fas fa-info-circle"></i>
-                                    <small>تم استخدام الإجابة الاحتياطية (نظام n8n غير متاح حالياً)</small>
+                                    <small>تم استخدام إجابة محلية (خدمة الذكاء الاصطناعي غير متاحة حالياً)</small>
                                 </div>
                             ` : ''}
                         </div>
@@ -169,7 +170,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                     
                 } catch (error) {
-                    educationalResultContent.innerHTML = `<p class="error">${error.message}</p>`;
+                    const errMsg = (error && error.message) ? String(error.message) : 'حدث خطأ غير متوقع';
+                    educationalResultContent.innerHTML = `
+                        <div class="educational-response">
+                            <h4>إجابة المعلمة الذكية:</h4>
+                            <p class="error">عذراً، لم نتمكن من إرسال سؤالك أو استلام الإجابة. ${errMsg}</p>
+                            <p style="margin-top: 1rem; color: #666;">جرّب تحديث الصفحة أو صياغة سؤالك بشكل أوضح ثم أرسل مرة أخرى.</p>
+                        </div>
+                    `;
+                    if (educationalResultActions) educationalResultActions.style.display = 'block';
+                    if (educationalRatingSection) educationalRatingSection.style.display = 'block';
                     console.error('Error processing educational query:', error);
                 } finally {
                     // Reset button state

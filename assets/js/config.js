@@ -1,6 +1,16 @@
 // Configuration for إندلالي - المعلمة الذكية
 window.CONFIG = {
-    // n8n Webhook Configuration
+    // OpenAI عبر Netlify: ضع المفتاح في Netlify فقط (Environment variables)
+    OPENAI_PROXY_URL: '/.netlify/functions/chat',
+    OPENAI_API_KEY: '',
+    OPENAI_MODEL: 'gpt-4o-mini',
+
+    // شات ذكي بديل (بدون N8n)
+    USE_N8N: false,
+    AI_CHAT_ENDPOINT: '',
+    AI_CHAT_API_KEY: '',
+    
+    // n8n (معطّل افتراضياً)
     N8N_WEBHOOK_URL: 'https://zoheir.app.n8n.cloud/webhook/de59295e-acda-4cfb-b178-3e8ba6dcc17f/chat',
     
     // Google Sheets Configuration

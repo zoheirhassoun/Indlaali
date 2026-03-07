@@ -52,26 +52,66 @@ class ApiService {
                 };
             }
 
-            // Check if online
             if (!this.isOnline) {
                 throw new Error(CONFIG.ERROR_MESSAGES.NETWORK_ERROR);
             }
 
-            // Try n8n webhook for other queries
-            const response = await this.callN8nWebhook(query);
-            
-            // Calculate response time
+            const proxyUrl = (CONFIG.OPENAI_PROXY_URL || '').trim();
+            const openaiKey = (CONFIG.OPENAI_API_KEY || '').trim();
+            if (proxyUrl) {
+                const response = await this.callOpenAIProxy(query);
+                const responseTime = Date.now() - startTime;
+                return {
+                    success: true,
+                    data: response,
+                    responseTime: responseTime,
+                    source: 'openai'
+                };
+            }
+            if (openaiKey) {
+                const response = await this.callOpenAI(query);
+                const responseTime = Date.now() - startTime;
+                return {
+                    success: true,
+                    data: response,
+                    responseTime: responseTime,
+                    source: 'openai'
+                };
+            }
+
+            if (CONFIG.AI_CHAT_ENDPOINT && CONFIG.AI_CHAT_ENDPOINT.trim()) {
+                const response = await this.callCustomChat(query);
+                const responseTime = Date.now() - startTime;
+                return {
+                    success: true,
+                    data: response,
+                    responseTime: responseTime,
+                    source: 'custom_chat'
+                };
+            }
+
+            if (CONFIG.USE_N8N) {
+                const response = await this.callN8nWebhook(query);
+                const responseTime = Date.now() - startTime;
+                return {
+                    success: true,
+                    data: response,
+                    responseTime: responseTime,
+                    source: 'n8n'
+                };
+            }
+
+            const fallbackResponse = this.generateFallbackResponse(query);
             const responseTime = Date.now() - startTime;
-            
             return {
                 success: true,
-                data: response,
+                data: fallbackResponse,
                 responseTime: responseTime,
-                source: 'n8n'
+                source: 'local'
             };
 
         } catch (error) {
-            console.warn('n8n webhook failed:', error);
+            console.warn('AI chat request failed:', error);
             console.log('Error details:', error.message);
             console.log('Error stack:', error.stack);
             
@@ -117,6 +157,8 @@ class ApiService {
                 },
                 body: JSON.stringify({
                     chatInput: query.trim(),
+                    message: query.trim(),
+                    query: query.trim(),
                     timestamp: new Date().toISOString(),
                     userAgent: navigator.userAgent,
                     language: navigator.language || 'ar',
@@ -135,28 +177,33 @@ class ApiService {
             }
 
             const data = await response.json();
-            
-            // Debug logging
             console.log('n8n response:', data);
-            console.log('Response status:', response.status);
-            console.log('Response headers:', response.headers);
-            
-            // Validate response format according to architecture
+
             if (!data) {
-                console.warn('Empty response from n8n:', data);
                 throw new Error(CONFIG.ERROR_MESSAGES.INVALID_RESPONSE);
             }
-            
-            // Handle different response formats
+
             let answer = '';
-            if (typeof data.text === 'string') {
-                answer = data.text;
-            } else if (typeof data.answer === 'string') {
-                answer = data.answer;
-            } else if (typeof data === 'string') {
-                answer = data;
-            } else {
-                console.warn('Invalid response format from n8n:', data);
+            if (typeof data.text === 'string' && data.text.trim()) {
+                answer = data.text.trim();
+            } else if (typeof data.answer === 'string' && data.answer.trim()) {
+                answer = data.answer.trim();
+            } else if (typeof data.output === 'string' && data.output.trim()) {
+                answer = data.output.trim();
+            } else if (typeof data.response === 'string' && data.response.trim()) {
+                answer = data.response.trim();
+            } else if (typeof data.message === 'string' && data.message.trim()) {
+                answer = data.message.trim();
+            } else if (typeof data.result === 'string' && data.result.trim()) {
+                answer = data.result.trim();
+            } else if (data.output && typeof data.output.text === 'string' && data.output.text.trim()) {
+                answer = data.output.text.trim();
+            } else if (typeof data === 'string' && data.trim()) {
+                answer = data.trim();
+            }
+
+            if (!answer) {
+                console.warn('n8n returned no answer:', data);
                 throw new Error(CONFIG.ERROR_MESSAGES.INVALID_RESPONSE);
             }
 
@@ -178,6 +225,160 @@ class ApiService {
                 throw new Error(CONFIG.ERROR_MESSAGES.NETWORK_ERROR);
             }
             
+            throw error;
+        }
+    }
+
+    /**
+     * Call OpenAI via Netlify (or other) proxy - no key in frontend
+     */
+    async callOpenAIProxy(query) {
+        const url = (CONFIG.OPENAI_PROXY_URL || '').trim();
+        if (!url) throw new Error('OPENAI_PROXY_URL not set');
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), CONFIG.API_TIMEOUT);
+        const fullUrl = url.startsWith('http') ? url : (window.location.origin + url);
+
+        try {
+            const response = await fetch(fullUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: query.trim(),
+                    query: query.trim(),
+                    model: (CONFIG.OPENAI_MODEL || 'gpt-4o-mini').trim() || 'gpt-4o-mini'
+                }),
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                throw new Error(data.error || `HTTP ${response.status}`);
+            }
+
+            const answer = (data.answer || '').trim();
+            if (!answer) throw new Error(CONFIG.ERROR_MESSAGES.INVALID_RESPONSE);
+
+            return {
+                answer,
+                recommendations: data.recommendations || [],
+                confidence: 0.9,
+                model: data.model || 'gpt-4o-mini'
+            };
+        } catch (error) {
+            clearTimeout(timeoutId);
+            if (error.name === 'AbortError') throw new Error(CONFIG.ERROR_MESSAGES.TIMEOUT_ERROR);
+            throw error;
+        }
+    }
+
+    /**
+     * Call OpenAI Chat Completions API (direct - may fail from browser due to CORS)
+     */
+    async callOpenAI(query) {
+        const key = (CONFIG.OPENAI_API_KEY || '').trim();
+        if (!key) throw new Error('OPENAI_API_KEY not set');
+        const model = (CONFIG.OPENAI_MODEL || 'gpt-4o-mini').trim() || 'gpt-4o-mini';
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), CONFIG.API_TIMEOUT);
+
+        try {
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + key
+                },
+                body: JSON.stringify({
+                    model: model,
+                    messages: [
+                        {
+                            role: 'system',
+                            content: 'أنت المعلمة الذكية ريم مشاري، متخصصة في مكتبات ومعلومات والبحث العلمي ومشروع التخرج. أجب بالعربية بشكل تعليمي وواضح ومفيد. قدم إجابة مباشرة ثم توصيات مختصرة إن أمكن.'
+                        },
+                        { role: 'user', content: query.trim() }
+                    ],
+                    max_tokens: 1024,
+                    temperature: 0.7
+                }),
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                const err = await response.json().catch(() => ({}));
+                throw new Error(err.error?.message || `HTTP ${response.status}`);
+            }
+
+            const data = await response.json();
+            const content = data.choices?.[0]?.message?.content?.trim() || '';
+            if (!content) throw new Error(CONFIG.ERROR_MESSAGES.INVALID_RESPONSE);
+
+            return {
+                answer: content,
+                recommendations: [],
+                confidence: 0.9,
+                model: data.model || model
+            };
+        } catch (error) {
+            clearTimeout(timeoutId);
+            if (error.name === 'AbortError') throw new Error(CONFIG.ERROR_MESSAGES.TIMEOUT_ERROR);
+            if (error.message && error.message.includes('fetch')) throw new Error(CONFIG.ERROR_MESSAGES.NETWORK_ERROR);
+            throw error;
+        }
+    }
+
+    /**
+     * استدعاء الشات الذكي البديل (بدون N8n)
+     * يدعم استجابة بصيغ: { answer }, { text }, { message }, { response }
+     */
+    async callCustomChat(query) {
+        const url = (CONFIG.AI_CHAT_ENDPOINT || '').trim();
+        if (!url) throw new Error('AI_CHAT_ENDPOINT not configured');
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), CONFIG.API_TIMEOUT);
+
+        try {
+            const headers = { 'Content-Type': 'application/json', 'Accept': 'application/json' };
+            if (CONFIG.AI_CHAT_API_KEY && CONFIG.AI_CHAT_API_KEY.trim()) {
+                headers['Authorization'] = 'Bearer ' + CONFIG.AI_CHAT_API_KEY.trim();
+            }
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({
+                    message: query.trim(),
+                    query: query.trim(),
+                    prompt: query.trim(),
+                    input: query.trim()
+                }),
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+
+            if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+
+            const data = await response.json();
+            if (!data) throw new Error(CONFIG.ERROR_MESSAGES.INVALID_RESPONSE);
+
+            let answer = (data.answer || data.text || data.message || data.response || data.output || (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '').trim();
+            if (typeof answer !== 'string') answer = '';
+            if (!answer) throw new Error(CONFIG.ERROR_MESSAGES.INVALID_RESPONSE);
+
+            return {
+                answer: answer,
+                recommendations: data.recommendations || [],
+                confidence: data.confidence != null ? data.confidence : 0.9,
+                model: data.model || 'custom_chat'
+            };
+        } catch (error) {
+            clearTimeout(timeoutId);
+            if (error.name === 'AbortError') throw new Error(CONFIG.ERROR_MESSAGES.TIMEOUT_ERROR);
+            if (error.message && error.message.includes('fetch')) throw new Error(CONFIG.ERROR_MESSAGES.NETWORK_ERROR);
             throw error;
         }
     }
@@ -254,6 +455,30 @@ class ApiService {
                     'ضع مخططاً قبل بدء الكتابة',
                     'استخدم جملاً واضحة ومباشرة',
                     'راجع وحرر نصوصك بعناية'
+                ]
+            },
+            'مشروع تخرج': {
+                answer: 'مشروع التخرج يمر بمراحل: اختيار الموضوع، وضع الخطة، جمع المصادر، الكتابة، والمراجعة. ركّز على وضوح المشكلة والأهداف والمنهجية.',
+                recommendations: [
+                    'حدد عنواناً واضحاً وأهدافاً قابلة للقياس',
+                    'استخدم منهجية بحث مناسبة (وصفي، تجريبي، إلخ)',
+                    'وثّق المصادر وفق نظام APA أو MLA'
+                ]
+            },
+            'بحث علمي': {
+                answer: 'خطوات البحث العلمي: اختيار الموضوع، صياغة المشكلة والأسئلة، مراجعة الأدبيات، تصميم المنهجية، جمع البيانات، التحليل، ومناقشة النتائج والخلاصات.',
+                recommendations: [
+                    'استخدم قواعد بيانات أكاديمية (مثل Google Scholar، دار المنظومة)',
+                    'احرص على صدق وثبات الأدوات إن استخدمت استبياناً',
+                    'اكتب الخلاصة والتوصيات في نهاية البحث'
+                ]
+            },
+            'مصادر المعلومات': {
+                answer: 'مصادر المعلومات تنقسم إلى أولية وثانوية وثالثية. الأولية: أبحاث ومقالات أصيلة. الثانوية: مراجعات وكتب. الثالثية: فهارس ودلائل.',
+                recommendations: [
+                    'اعتمد المصادر الأولية في البحث الأكاديمي',
+                    'تجنب المصادر غير الموثوقة أو غير المحكمة',
+                    'استخدم الاقتباس والإحالة بشكل صحيح'
                 ]
             }
         };
