@@ -2,7 +2,7 @@
 window.CONFIG = {
     // OpenAI عبر Netlify: ضع المفتاح في Netlify فقط (Environment variables)
     OPENAI_PROXY_URL: '/.netlify/functions/chat',
-    OPENAI_API_KEY: '',
+    OPENAI_API_KEY: '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',
     OPENAI_MODEL: 'gpt-4o-mini',
 
     // شات ذكي بديل (بدون N8n)

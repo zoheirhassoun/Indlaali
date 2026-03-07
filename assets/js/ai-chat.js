@@ -130,6 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <div class="fallback-notice">
                                     <i class="fas fa-info-circle"></i>
                                     <small>تم استخدام إجابة محلية (خدمة الذكاء الاصطناعي غير متاحة حالياً)</small>
+                                    ${result.originalError ? `<br><small style="opacity:0.9">السبب: ${String(result.originalError).replace(/</g, '&lt;').replace(/>/g, '&gt;')}</small>` : ''}
                                 </div>
                             ` : ''}
                         </div>
